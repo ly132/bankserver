@@ -55,6 +55,8 @@ public class open extends AbstractProcessor {
 				data[3] + "', '" + data[4] + "', '" + data[2] + "';";
 		
 		
+		
+		
 		String friendID = data.get("ADDFRIEND");
 		addFriend(rd, head, friendID);
 	}
