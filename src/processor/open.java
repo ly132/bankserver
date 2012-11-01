@@ -2,16 +2,10 @@ package processor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-
 import db.QueryProcessor;
+import db.UpdateProcessor;
 import server.Server;
 
-import data.Address;
-import data.OfflineData;
-import data.OfflineDataList;
-import data.OnlineUser;
-import data.OnlineUserList;
 import data.RcvData;
 import data.SendData;
 import data.SendDataList;
@@ -20,7 +14,7 @@ public class open extends AbstractProcessor {
 
 	@Override
 	public
-	void processing(RcvData rd) throws SQLException{
+	void processing(RcvData rd) {
 		// TODO Auto-generated method stub
 		// open^pid^account_type(S/T)^passwd^balance
 		String data[] = rd.getData();
@@ -28,6 +22,8 @@ public class open extends AbstractProcessor {
 		
 		String SQL_pid = "SELECT * FROM SYSTEM.USER WHERE UID='" + data[1] + "';";
 		ResultSet pidResult = QueryProcessor.query(SQL_pid);
+		int createResult = 0;
+		try{
 		if( ! pidResult.next() )
 		{
 			//Condition 1, pID not exits.
@@ -54,11 +50,20 @@ public class open extends AbstractProcessor {
 				"VALUES ('" + newAid + "', '" + data[1] + "', '" + 
 				data[3] + "', '" + data[4] + "', '" + data[2] + "';";
 		
-		
-		
-		
-		String friendID = data.get("ADDFRIEND");
-		addFriend(rd, head, friendID);
+		createResult = UpdateProcessor.update(SQL_createAccout);
+		}catch( Exception e )
+		{
+			createResult = 0;
+		}
+		String rs;
+		if( createResult == 0 )
+		{
+			//failed
+			rs = head + "failed";
+		}
+		else
+			rs = head + "success";
+		SendDataList.getInstance().add(
+				new SendData( rd, rs ));
 	}
-
 }
