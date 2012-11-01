@@ -46,11 +46,13 @@ public class open extends AbstractProcessor {
 		ResultSet aidResult = QueryProcessor.query(SQL_aid);
 		String newAid;
 		if( aidResult.next()  )
-		{		 
 			newAid = ((Integer)(Integer.parseInt(aidResult.getString("MAID")) + 1)).toString();
-		}
 		else
 			newAid = "1000";
+		
+		String SQL_createAccout = "INSERT INTO SYSTEM.ACCOUNT (AID, UID, PASSWD, BALANCE, TYPE) " +
+				"VALUES ('" + newAid + "', '" + data[1] + "', '" + 
+				data[3] + "', '" + data[4] + "', '" + data[2] + "';";
 		
 		
 		String friendID = data.get("ADDFRIEND");
