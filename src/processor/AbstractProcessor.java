@@ -6,5 +6,5 @@ import data.RcvData;
 
 public abstract class AbstractProcessor {
 
-	public abstract void processing(RcvData rd);	
+	public abstract void processing(RcvData rd);
 }
