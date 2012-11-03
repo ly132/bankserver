@@ -6,5 +6,5 @@ import data.RcvData;
 
 public abstract class AbstractProcessor {
 
-	public abstract void processing(RcvData rd) throws SQLException;	
+	public abstract void processing(RcvData rd);	
 }
