@@ -7,6 +7,7 @@ import server.Server;
 import data.RcvData;
 import data.SendData;
 import data.SendDataList;
+import db.UpdateProcessor;
 
 public class withdrawal extends AbstractProcessor{
 
@@ -32,10 +33,15 @@ public class withdrawal extends AbstractProcessor{
 			{
 				baseLine2 = 10000;
 				String uid = CommonMethods.getUidByAid( data[1] );
-				total_balance = CommonMethods.getWholeBalanceByUid( uid );
+				total_balance = CommonMethods.getTotalBalanceByUid( uid );
 			}
 			if( ((balance1-sum) > baseLine1) && ((total_balance-sum) > baseLine2)  )
-				isSuccess = true;			
+			{
+				String SQL_updateBlanace = "UPDATE SYSTEM.ACCOUNT SET BALANCE='" + 
+						(balance1-sum) + "' WHERE AID='" + data[1] + "';";
+				if( UpdateProcessor.update(SQL_updateBlanace) != 0 )
+					isSuccess = true;			
+			}
 		}
 		}catch( Exception e )
 		{
@@ -44,10 +50,13 @@ public class withdrawal extends AbstractProcessor{
 		}
 		String rs;
 		if( isSuccess )
-			rs = head + (balance1-sum);
+		{
+			rs = "" + (balance1-sum);
+			Log.log( rd.getJobNumber(), data[1], data[0], rs );
+		}
 		else
-			rs = head + "failed";
+			rs = "failed";
 		SendDataList.getInstance().add(
-				new SendData( rd, rs ));
+				new SendData( rd, head + rs ));
 	}
 }

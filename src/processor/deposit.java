@@ -36,13 +36,16 @@ public class deposit extends AbstractProcessor{
 				e.printStackTrace();
 			}
 		}
-		String send = head;
+		String send = "";
 		if( isSuccess )
+		{
 			send += balance;
+			Log.log( rd.getJobNumber(), data[1], data[0], send );
+		}
 		else
 			send += "failed";
 		SendDataList.getInstance().add(
-				new SendData( rd, send ));
+				new SendData( rd, head + send ));
 	}
 
 }

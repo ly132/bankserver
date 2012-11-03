@@ -41,7 +41,6 @@ public class UpdateProcessor implements Callable<Integer> {
 	{
 		Integer result = Server.db2con.connect().createStatement().executeUpdate(sql);
 		Server.db2con.close();
-		return result;
-		
+		return result;		
 	}
 }

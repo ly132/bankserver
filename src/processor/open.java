@@ -22,6 +22,7 @@ public class open extends AbstractProcessor {
 		
 		String SQL_pid = "SELECT * FROM SYSTEM.USER WHERE UID='" + data[1] + "';";
 		ResultSet pidResult = QueryProcessor.query(SQL_pid);
+		String newAid = "";
 		int createResult = 0;
 		try{
 		if( ! pidResult.next() )
@@ -31,7 +32,7 @@ public class open extends AbstractProcessor {
 					new SendData( rd, head + "customer not esixt" ));
 			return;
 		}
-		if( pidResult.getString("TYPE").equals("V") && Double.parseDouble(data[4]) < 1000000 )
+		if( pidResult.getString("TYPE").equals("v") && Double.parseDouble(data[4]) < 1000000 )
 		{
 			//init balance for vip should be large than 1000000
 			SendDataList.getInstance().add(
@@ -40,7 +41,6 @@ public class open extends AbstractProcessor {
 		}
 		String SQL_aid = "SELECT MAX(AID) AS MAID FROM SYSTEM.ACCOUNT;";
 		ResultSet aidResult = QueryProcessor.query(SQL_aid);
-		String newAid;
 		if( aidResult.next()  )
 			newAid = ((Integer)(Integer.parseInt(aidResult.getString("MAID")) + 1)).toString();
 		else
@@ -57,13 +57,13 @@ public class open extends AbstractProcessor {
 		}
 		String rs;
 		if( createResult == 0 )
-		{
-			//failed
-			rs = head + "failed";
-		}
+			rs = "failed";
 		else
-			rs = head + "success";
+		{
+			rs = "success";
+			Log.log(rd.getJobNumber(),newAid,data[0],rs);
+		}
 		SendDataList.getInstance().add(
-				new SendData( rd, rs ));
+				new SendData( rd, head + rs ));		
 	}
 }
