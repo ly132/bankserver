@@ -1,20 +1,16 @@
 package db;
 import	java.sql.*;
 
-public class db2Connection {
+public class dbConnection {
 	
 	Connection con = null;
-	String db2URL = "jdbc:db2:STALK";
+	String dbURL = "jdbc:mysql://172.18.216.170:3306/bank";
+	String user = "root";
+	String passwd = "root";
 	
-	public db2Connection(){
+	public dbConnection(){
 		try {
-			Class.forName("COM.ibm.db2.jdbc.app.DB2Driver").newInstance();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Class.forName("com.mysql.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -23,7 +19,7 @@ public class db2Connection {
 	
 	public Connection connect(){
 		try {
-			con = DriverManager.getConnection(db2URL);
+			con = DriverManager.getConnection(dbURL,user,passwd);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

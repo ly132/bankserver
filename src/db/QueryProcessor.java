@@ -39,7 +39,7 @@ public class QueryProcessor implements Callable<ResultSet> {
 	@Override
 	public synchronized ResultSet call() throws Exception {
 		// TODO Auto-generated method stub
-		ResultSet rs = Server.db2con.connect().createStatement().executeQuery(sql);
+		ResultSet rs = Server.dbconn.connect().createStatement().executeQuery(sql);
 		return rs;
 	}
 }

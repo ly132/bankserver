@@ -39,8 +39,8 @@ public class UpdateProcessor implements Callable<Integer> {
 	@Override
 	public synchronized Integer call() throws Exception
 	{
-		Integer result = Server.db2con.connect().createStatement().executeUpdate(sql);
-		Server.db2con.close();
+		Integer result = Server.dbconn.connect().createStatement().executeUpdate(sql);
+		Server.dbconn.close();
 		return result;		
 	}
 }

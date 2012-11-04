@@ -13,7 +13,7 @@ import java.util.concurrent.Executors;
 import data.OnlineUserList;
 import data.RcvDataList;
 import data.SendDataList;
-import db.db2Connection;
+import db.dbConnection;
 
 /**
  * This class is the main class of the server application of school talk. 
@@ -27,7 +27,7 @@ public class Server{
 	
 	public static ExecutorService pool = null;
 	static DatagramSocket serverSocket = null;
-	public static db2Connection db2con = new db2Connection();
+	public static dbConnection dbconn = new dbConnection();
 	public static final String token = "^";
 	
 	public static void main(String[] args){
@@ -91,7 +91,7 @@ public class Server{
 			if( cmd.equals("quit") )
 			{
 				pool.shutdownNow();
-				db2con.close();
+				dbconn.close();
 //				serverSocket.close();
 				System.exit(0);
 			}

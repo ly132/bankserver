@@ -36,7 +36,7 @@ public class RcvData {
 		da = da.trim();
 		try{
 			this.job_number = da.substring(0,da.indexOf('^'));
-			this.data = da.substring(da.indexOf('^')+1).split("^");
+			this.data = da.substring(da.indexOf('^')+1).split("\\^");
 		}catch( Exception e )
 		{
 			e.printStackTrace();
