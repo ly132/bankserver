@@ -33,7 +33,7 @@ public class changepasswd extends AbstractProcessor{
 			else
 			{
 				String SQL_up  = "UPDATE SYSTEM.OPERATOR SET PASSWD='" + 
-						data[4] + "' WHERE AID='" +data[2] + "' AND UID=" + data[1] + "';";
+						data[4] + "' WHERE AID='" +data[2] + "' AND UID='" + data[1] + "';";
 				if( UpdateProcessor.update(SQL_up) !=0 )
 					isSuccess = true;
 			}
@@ -46,11 +46,11 @@ public class changepasswd extends AbstractProcessor{
 		String rs = "";
 		if( isSuccess )
 		{
-			rs = "successed";
-			Log.log(rd.getJobNumber(), data[2], data[0], rs);
+			rs = "success";
+			Log.log(rd.getJobNumber(), data[2], data[0], "", 0, 0, 0);
 		}
 		else
-			rs = "failed";
+			rs = "fail";
 		SendDataList.getInstance().add(
 				new SendData( rd, head+ rs));
 		

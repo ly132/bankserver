@@ -26,7 +26,7 @@ public class MsgProcessor implements Runnable {
 			
 				AbstractProcessor ap = (AbstractProcessor) Class.forName(
 						"processor." + rd.getType()).newInstance();				
-				ap.processing(rd);				
+				ap.processing(rd);
 			} catch (InstantiationException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();

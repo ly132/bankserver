@@ -52,7 +52,7 @@ public class withdrawal extends AbstractProcessor{
 		if( isSuccess )
 		{
 			rs = "" + (balance1-sum);
-			Log.log( rd.getJobNumber(), data[1], data[0], rs );
+			Log.log( rd.getJobNumber(), data[1], data[0], rs, 0, 0, 0 );
 		}
 		else
 			rs = "failed";

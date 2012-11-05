@@ -67,7 +67,7 @@ public class transfer extends AbstractProcessor{
 		if( isSuccess )
 		{
 			resultString = "" + from_balance;
-			Log.log(rd.getJobNumber(),data[2],data[0],"target:" + data[6] + resultString);
+			Log.log(rd.getJobNumber(),data[2],data[0],"target:" + data[6] + resultString, 0, 0, 0);
 		}
 		else
 			resultString = "failed";

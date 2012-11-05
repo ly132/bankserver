@@ -51,14 +51,14 @@ public class addem extends AbstractProcessor{
 				isSuccess = true;
 		}catch (Exception e)
 		{
-			e.printStackTrace();
+//			e.printStackTrace();
 			isSuccess = false;
-//			rs = e.getCause().getMessage();
+			rs = e.getMessage();
 		}
 		if( isSuccess )
 		{
 			rs = "success";
-			Log.log(rd.getJobNumber(),"",data[0],data[1]+":"+rs);
+			Log.log(rd.getJobNumber(),"",data[0],data[1], 0, 0, 0);
 		}
 		else
 			if(rs.equals(""))

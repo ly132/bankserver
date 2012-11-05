@@ -29,7 +29,7 @@ public class CommonMethods {
 	
 	static double getBalance( String aid ) throws Exception
 	{
-		String SQL_getBalance = "SELECT BALANCE FORM SYSTEM.ACCOUNT WHERE AID=" + aid + "';";
+		String SQL_getBalance = "SELECT BALANCE FROM SYSTEM.ACCOUNT WHERE AID='" + aid + "';";
 		ResultSet rss = QueryProcessor.query(SQL_getBalance);
 		if( rss.next() )
 			return rss.getDouble("BALANCE");
@@ -38,10 +38,10 @@ public class CommonMethods {
 	}
 
 	public static String getUserTypeByAid(String aid) throws Exception{
-		String SQL = "SELECT TYPE FROM SYSTEM.TYPE, SYSTEM.USER WHERE USER.UID=ACCOUNT.UID AND ACCOUNT.AID='" + aid + "';";
+		String SQL = "SELECT USER.TYPE FROM SYSTEM.ACCOUNT, SYSTEM.USER WHERE USER.UID=ACCOUNT.UID AND ACCOUNT.AID='" + aid + "';";
 		ResultSet rss = QueryProcessor.query(SQL);
 		if( rss.next() )
-			return rss.getString("TYPE");
+			return rss.getString("USER.TYPE");
 		else
 			throw new Exception("failed");
 	}

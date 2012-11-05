@@ -39,7 +39,7 @@ public class login extends AbstractProcessor {
 			rs = "1" + Server.token + data[1] + Server.token + name;
 		}
 		else if( rs.equals("") )
-				rs = "failed";
+				rs = "0";
 		SendDataList.getInstance().add(
 				new SendData( rd, head + rs ));
 	}

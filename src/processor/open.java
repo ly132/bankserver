@@ -41,14 +41,14 @@ public class open extends AbstractProcessor {
 		}
 		String SQL_aid = "SELECT MAX(AID) AS MAID FROM SYSTEM.ACCOUNT;";
 		ResultSet aidResult = QueryProcessor.query(SQL_aid);
-		if( aidResult.next()  )
+		if( aidResult.next() &&  aidResult.getString("MAID") != null )
 			newAid = ((Integer)(Integer.parseInt(aidResult.getString("MAID")) + 1)).toString();
 		else
-			newAid = "1000";
+			newAid = "100000";
 		
 		String SQL_createAccout = "INSERT INTO SYSTEM.ACCOUNT (AID, UID, PASSWD, BALANCE, TYPE) " +
 				"VALUES ('" + newAid + "', '" + data[1] + "', '" + 
-				data[3] + "', '" + data[4] + "', '" + data[2] + "';";
+				data[3] + "', '" + data[4] + "', '" + data[2] + "');";
 		
 		createResult = UpdateProcessor.update(SQL_createAccout);
 		}catch( Exception e )
@@ -61,9 +61,9 @@ public class open extends AbstractProcessor {
 		else
 		{
 			rs = "success";
-			Log.log(rd.getJobNumber(),newAid,data[0],rs);
+			Log.log(rd.getJobNumber(),newAid,data[0],newAid, Double.parseDouble(data[4]), 0, Double.parseDouble(data[4]));
 		}
 		SendDataList.getInstance().add(
-				new SendData( rd, head + rs ));		
+				new SendData( rd, head + rs + ":new account id is " + newAid ));		
 	}
 }

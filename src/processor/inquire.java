@@ -1,6 +1,9 @@
 package processor;
 
 import java.sql.ResultSet;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import server.Server;
 import data.RcvData;
@@ -22,17 +25,40 @@ public class inquire extends AbstractProcessor{
 		double balance = 0;
 		String rs = "";
 		boolean isSuccess = false;
-		String logs = "";
+		String logs = "TIME\t\t\tOPER\tTYPE\tINCOME\tOUTCOME\tBALANCE" + Server.token;
 		try{
 			if( CommonMethods.checkPasswd(data[2], data[3]) )
 			{
 				balance = CommonMethods.getBalance(data[2]);
-				String SQL_time = "SELECT * FROM SYSTEM.LOG WHERE LOG.TIME>'" + t1 + "' AND LOG.TIME<'" + t2 + "';";
-				ResultSet rss = QueryProcessor.query(SQL_time);
-				while( rss.next() )
+				String SQL_last_open_time = "SELECT MAX(TIME) AS MTIME FROM SYSTEM.LOG WHERE TYPE='OPEN' AND TARGET='" + data[2] + "';";
+				ResultSet last_open_time_rss = QueryProcessor.query(SQL_last_open_time);
+				String last_open_time = null;
+				if( last_open_time_rss.next() )
 				{
-					logs = logs + rss.getString("TYPE") + "  " + rss.getString("RESULT") + 
-							"  " + rss.getTimestamp("TIME") + Server.token;
+					last_open_time = last_open_time_rss.getString("MTIME");
+		//			last_open_time = last_open_time == null ? "00000000" : last_open_time;
+				}
+				if( last_open_time == null )
+					last_open_time = convertToDatetime("00000000");
+				String SQL_time = "SELECT * FROM SYSTEM.LOG WHERE LOG.TIME>'" + t1 + 
+						"' AND LOG.TIME<'" + t2 + "' AND LOG.TIME>='" + last_open_time + "' AND TARGET='" + data[2] +  "';";
+				ResultSet rss = QueryProcessor.query(SQL_time);
+				
+				String[] types = {"open","deposit","withdrawal","transfer"};
+				
+				List<String> allow_type = Arrays.asList(types);
+				while( rss.next()  )//&& allow_type.contains(rss.getString("TYPE"))
+				{
+					// time operator type income outcome balance
+					String income = rss.getString("INCOME") == null ? "" : rss.getString("INCOME");
+					String outcome = rss.getString("OUTCOME") == null ? "" : rss.getString("OUTCOME");
+					String Balance = rss.getString("BALANCE") == null ? "" : rss.getString("BALANCE");
+					String type = rss.getString("TYPE");
+					if( !allow_type.contains(type) )
+						continue;
+					type = type.length() > 7 ? type.substring(0,7) : type;
+					logs = logs + rss.getString("TIME") + "\t" + rss.getString("OPER") + 
+							"\t" + type + "\t" + income + "\t" + outcome + "\t" + Balance + Server.token;
 				}
 				isSuccess = true;
 			}

@@ -30,7 +30,7 @@ public class addcustomer extends AbstractProcessor{
 		if( isSuccess )
 		{
 			rs = "success";
-			Log.log(rd.getJobNumber(),"",data[0],data[1]+":"+rs);
+			Log.log(rd.getJobNumber(),"",data[0],data[1], 0, 0, 0);
 		}
 		else
 			rs = "failed";
