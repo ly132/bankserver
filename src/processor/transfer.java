@@ -24,12 +24,12 @@ public class transfer extends AbstractProcessor{
 		double to_balance = 0;
 		double sum = Double.parseDouble(data[5]);
 		try{
-		if( CommonMethods.checkPasswd(data[2], data[3]) )
+		if( CommonMethods.checkPasswd(data[2], data[3]) && CommonMethods.checkUid(data[1], data[2]) )
 		{
-			String SQL_from = "SELECT * FORM SYSTEM.ACCOUNT,SYSTEM.USER WHERE " +
+			String SQL_from = "SELECT * FROM SYSTEM.ACCOUNT,SYSTEM.USER WHERE " +
 					"ACCOUNT.UID=USER.UID AND ACCOUNT.AID='" + data[2] + "';";
-			String SQL_to = "SELECT * FORM SYSTEM.ACCOUNT,SYSTEM.USER WHERE " +
-					"ACCOUNT.UID=USER.UID ADN ACCOUNT.AID='" + data[6] + "';";
+			String SQL_to = "SELECT * FROM SYSTEM.ACCOUNT,SYSTEM.USER WHERE " +
+					"ACCOUNT.UID=USER.UID AND ACCOUNT.AID='" + data[6] + "';";
 			ResultSet rss_from = QueryProcessor.query(SQL_from);
 			ResultSet rss_to = QueryProcessor.query(SQL_to);
 			if( !rss_from.next() || !rss_to.next() )
@@ -42,11 +42,11 @@ public class transfer extends AbstractProcessor{
 //				rss_from.getString("UID").equals(data[1])	&&
 //				rss_from.getString("NAME").equals(data[4])	&&
 				rss_to.getString("NAME").equals(data[7]) 	&&
-				( (rss_from.getString("TYPE").equals("n") && rss_from.getString("UID").equals(rss_to.getString("UID"))) ||
-				  (rss_from.getString("TYPE").equals("e") && rss_to.getString("TYPE").equals("e")) ||
-				  (rss_from.getString("TYPE").equals("v") && !rss_to.getString("TYPE").equals("e"))
+				( (rss_from.getString("USER.TYPE").equals("n") && rss_from.getString("UID").equals(rss_to.getString("UID"))) ||
+				  (rss_from.getString("USER.TYPE").equals("e") && rss_to.getString("USER.TYPE").equals("e")) ||
+				  (rss_from.getString("USER.TYPE").equals("v") && !rss_to.getString("USER.TYPE").equals("e"))
 				)	&&
-				(isBalanceEnoughForWithdrawal(rss_from,sum))
+				(isBalanceEnoughForWithdrawal(rss_from,rss_to,sum))
 			  )
 			{
 				from_balance = rss_from.getDouble("BALANCE") - sum;
@@ -66,8 +66,15 @@ public class transfer extends AbstractProcessor{
 		}
 		if( isSuccess )
 		{
-			resultString = "" + from_balance;
-			Log.log(rd.getJobNumber(),data[2],data[0],"target:" + data[6] + resultString, 0, 0, 0);
+			resultString = "success\nbalance:" + from_balance;
+			Log.log(rd.getJobNumber(),data[2],data[0],data[6], 0, Double.parseDouble(data[5]), from_balance);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			Log.log(rd.getJobNumber(),data[6],data[0],data[2], Double.parseDouble(data[5]), 0, to_balance);
 		}
 		else
 			resultString = "failed";
@@ -76,16 +83,19 @@ public class transfer extends AbstractProcessor{
 		
 	}
 
-	private boolean isBalanceEnoughForWithdrawal(ResultSet rss_from, double sum) throws Exception {
+	private boolean isBalanceEnoughForWithdrawal(ResultSet rss_from, ResultSet rss_to, double sum) throws Exception {
 		// TODO Auto-generated method stub
-		String user_type = rss_from.getString("TYPE");
+		String user_type = rss_from.getString("USER.TYPE");
 		double balance = rss_from.getDouble("BALANCE");
 		if( user_type.equals("n") )
 			return (balance >= sum);
 		if( user_type.equals("v") )
 			return (balance >= sum-100000);
-		if( user_type.equals("e") )
-			return (balance >= sum && CommonMethods.getTotalBalanceByUid(rss_from.getString("UID")) >= sum+10000 );
+		if( user_type.equals("e") && balance >= sum )
+			if( rss_from.getString("UID").equals(rss_to.getString("UID")) )
+				return true;
+			else
+				return CommonMethods.getTotalBalanceByUid(rss_from.getString("UID")) >= sum+10000;
 		return false;
 	}
 

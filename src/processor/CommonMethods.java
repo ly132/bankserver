@@ -47,7 +47,7 @@ public class CommonMethods {
 	}
 
 	public static String getUidByAid(String aid) throws Exception {
-		String SQL = "SELECT UID FORM SYSTEM.ACCOUNT WHERE AID='" + aid + "';";
+		String SQL = "SELECT UID FROM SYSTEM.ACCOUNT WHERE AID='" + aid + "';";
 		ResultSet rss = QueryProcessor.query(SQL);
 		if( rss.next() )
 			return rss.getString("UID");
@@ -60,8 +60,8 @@ public class CommonMethods {
 		
 		double total_balance = 0;
 		try{
-			String SQL = "SELECT BALANCE FORM SYSTEM.OPERATOR, SYSTEM.ACCOUNT WHERE OPERATOR.UID='" 
-							+ uid + "' AND ACCOUNT.AID=USER.AID;";
+			String SQL = "SELECT BALANCE FROM SYSTEM.ACCOUNT WHERE UID='" 
+							+ uid + "';";
 			ResultSet rss = QueryProcessor.query(SQL);
 			while( rss.next() )
 				total_balance += rss.getDouble("BALANCE");

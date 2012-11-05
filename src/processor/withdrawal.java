@@ -35,7 +35,7 @@ public class withdrawal extends AbstractProcessor{
 				String uid = CommonMethods.getUidByAid( data[1] );
 				total_balance = CommonMethods.getTotalBalanceByUid( uid );
 			}
-			if( ((balance1-sum) > baseLine1) && ((total_balance-sum) > baseLine2)  )
+			if( ((balance1-sum) >= baseLine1) && ((total_balance-sum) >= baseLine2)  )
 			{
 				String SQL_updateBlanace = "UPDATE SYSTEM.ACCOUNT SET BALANCE='" + 
 						(balance1-sum) + "' WHERE AID='" + data[1] + "';";
@@ -51,7 +51,7 @@ public class withdrawal extends AbstractProcessor{
 		String rs;
 		if( isSuccess )
 		{
-			rs = "" + (balance1-sum);
+			rs = "balance:" + (balance1-sum);
 			Log.log( rd.getJobNumber(), data[1], data[0], rs, 0, 0, 0 );
 		}
 		else
