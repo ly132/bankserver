@@ -20,11 +20,18 @@ public class getSubordinate extends AbstractProcessor {
 		boolean isSuccess = false;
 		String rs = head;
 		try{
-			String SQL_1 = "SELECT JOBNUM,NAME FROM SYSTEM.EMPLOYEE WHERE BJOBNUM='" + rd.getJobNumber() + "';";
+			String SQL_1 = "SELECT * FROM SYSTEM.EMPLOYEE WHERE BJOBNUM='" + rd.getJobNumber() + "';";
 			ResultSet rss = QueryProcessor.query(SQL_1);
 			while( rss.next() )
 			{
-				rs = rs + rss.getString("JOBNUM") + ":" + rss.getString("NAME") + Server.token;
+				StringBuilder sb = new StringBuilder();
+				sb.append(rss.getString("JOBNUM")).append(":")
+				  .append(rss.getString("pid")).append(":")
+				  .append(rss.getString("name")).append(":")
+				  .append(rss.getString("age")).append(":")
+				  .append(rss.getString("phone")).append(":")
+				  .append(rss.getString("address")).append(":");
+				rs = rs + sb.toString() + Server.token;
 			}
 			//rs = rs.substring(0,rs.length()-1);
 			isSuccess = true;
