@@ -39,11 +39,11 @@ public class deposit extends AbstractProcessor{
 		String send = "";
 		if( isSuccess )
 		{
-			send = "success\tbalance:" + balance;
+			send = "Deposit Success\nCurrent Balance:" + balance;
 			Log.log( rd.getJobNumber(), data[1], data[0], "", Double.parseDouble(data[3]), 0, balance );
 		}
 		else
-			send += "fail";
+			send += "Deposit Fail";
 		SendDataList.getInstance().add(
 				new SendData( rd, head + send ));
 	}

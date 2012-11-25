@@ -22,6 +22,7 @@ public class addem extends AbstractProcessor{
 		
 		boolean isSuccess = false;
 		String rs = "";
+		String new_job_num = null;
 		try{
 			String SQL_checkPid = "SELECT PID FROM SYSTEM.EMPLOYEE WHERE PID=" + data[1] + ";";
 			if( QueryProcessor.query(SQL_checkPid).next() )
@@ -31,7 +32,7 @@ public class addem extends AbstractProcessor{
 			String threshold2 = em_type + "00000";
 			String SQL_getids = "SELECT MAX(JOBNUM) FROM SYSTEM.EMPLOYEE WHERE JOBNUM<" + threshold2 + " AND JOBNUM>" + threshold1 +";";
 			ResultSet rss = QueryProcessor.query(SQL_getids);
-			String new_job_num = em_type-1 + "00001";
+			new_job_num = em_type-1 + "00001";
 			if( rss.next() )
 			{
 				String tmp = rss.getString("MAX(JOBNUM)");
@@ -57,12 +58,12 @@ public class addem extends AbstractProcessor{
 		}
 		if( isSuccess )
 		{
-			rs = "success";
+			rs = "Add Employee Success\nPersional ID is " + data[1] + " \nJob Number is " + new_job_num;
 			Log.log(rd.getJobNumber(),"",data[0],data[1], 0, 0, 0);
 		}
 		else
 			if(rs.equals(""))
-				rs = "failed";
+				rs = "Add Employee Fail";
 		SendDataList.getInstance().add(
 				new SendData( rd, head + rs ));		
 	}

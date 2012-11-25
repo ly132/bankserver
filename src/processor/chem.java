@@ -24,13 +24,13 @@ public class chem extends AbstractProcessor{
 		if( rss.next() && rss.getString("PASSWD").equals(data[1]) )
 		{
 			String type;
-			if( data[2].equals("psw") )
+			if( data[2].equals("Passwd") )
 				type = "PASSWD";
-			else if( data[2].equals("age") )
+			else if( data[2].equals("Age") )
 				type = "AGE";
-			else if( data[2].equals("phone") )
+			else if( data[2].equals("Phone") )
 				type = "PHONE";
-			else if( data[2].equals("addr") )
+			else if( data[2].equals("Address") )
 				type = "ADDRESS";
 			else
 				throw new Exception();
@@ -46,9 +46,9 @@ public class chem extends AbstractProcessor{
 		}
 		String rs;
 		if( isSuccess )
-			rs = "suceess";
+			rs = "Change Employee Information Success";
 		else
-			rs = "fail";
+			rs = "Change Employee Information Fail";
 		SendDataList.getInstance().add(
 				new SendData(rd,head+rs));
 	}

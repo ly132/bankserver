@@ -13,7 +13,7 @@ public class cancel extends AbstractProcessor{
 
 	public void processing(RcvData rd) {
 		
-		// rcvd cancel^pid^aid^passwd
+		// rcvd cancel^aid
 		//  		0	1	2	3	
 		// send cancel^succeeded/failed
 		
@@ -23,20 +23,20 @@ public class cancel extends AbstractProcessor{
 		String rs = "";
 		double balance = 0;
 		try{
-		if( CommonMethods.checkPasswd(data[2], data[3]) && CommonMethods.checkUid(data[1],data[2]) )
-		{
+	//	if( CommonMethods.checkPasswd(data[2], data[3]) && CommonMethods.checkUid(data[1],data[2]) )
+//		{
 			String SQL_1 = "SELECT USER.TYPE,BALANCE FROM SYSTEM.USER, SYSTEM.ACCOUNT WHERE " +
-					"ACCOUNT.UID=USER.UID AND ACCOUNT.AID='" + data[2] + "';";
+					"ACCOUNT.UID=USER.UID AND ACCOUNT.AID='" + data[1] + "';";
 			ResultSet rss = QueryProcessor.query(SQL_1);
 			if( rss.next() )
 			{
 				String type = rss.getString("USER.TYPE");
 				balance = rss.getDouble("BALANCE");
-				String SQL_del = "DELETE FROM SYSTEM.ACCOUNT WHERE AID='" + data[2] + "';";
+				String SQL_del = "DELETE FROM SYSTEM.ACCOUNT WHERE AID='" + data[1] + "';";
 				if( balance >=0 && UpdateProcessor.update(SQL_del) != 0 ){
 					if( type.equals("e") )
 					{
-						SQL_del = "DELETE FROM SYSTEM.OPERATOR WHERE AID='" + data[2] + "';";
+						SQL_del = "DELETE FROM SYSTEM.OPERATOR WHERE AID='" + data[1] + "';";
 						if( UpdateProcessor.update(SQL_del) != 0 )
 							isSuccess = true;
 					}
@@ -44,7 +44,7 @@ public class cancel extends AbstractProcessor{
 						isSuccess = true;
 				}
 			}
-		}
+	//	}
 		}catch( Exception e )
 		{
 			e.printStackTrace();
@@ -52,11 +52,11 @@ public class cancel extends AbstractProcessor{
 		}
 		if( isSuccess )
 		{
-			rs = "success";
-			Log.log(rd.getJobNumber(),data[2],data[0],"", 0, balance, balance);
+			rs = "Cancel Account " + data[1] + " Success\nWithdrawal Sum is " + balance;
+			Log.log(rd.getJobNumber(),data[1],data[0],"", 0, balance, balance);
 		}
 		else
-			rs = "fail";
+			rs = "Cancel Account Fail";
 		SendDataList.getInstance().add(
 				new SendData( rd, head + rs ));
 	}

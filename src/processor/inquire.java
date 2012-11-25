@@ -69,7 +69,7 @@ public class inquire extends AbstractProcessor{
 		}catch( Exception e )
 		{
 			isSuccess = false;
-			rs = "failed";
+			rs = "Inquire Fail";
 		}
 		if( isSuccess )
 			SendDataList.getInstance().add(

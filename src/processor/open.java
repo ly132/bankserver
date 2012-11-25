@@ -29,14 +29,14 @@ public class open extends AbstractProcessor {
 		{
 			//Condition 1, pID not exits.
 			SendDataList.getInstance().add(
-					new SendData( rd, head + "customer not esixt" ));
+					new SendData( rd, head + "Open Account Fail\nCustomer " + data[1] + " Not Exist" ));
 			return;
 		}
 		if( pidResult.getString("TYPE").equals("v") && Double.parseDouble(data[4]) < 1000000 )
 		{
 			//init balance for vip should be large than 1000000
 			SendDataList.getInstance().add(
-					new SendData( rd, head + "not enough balance for VIP"));
+					new SendData( rd, head + "Open Account Fail\nNot Enough Balance for VIP"));
 			return;
 		}
 		String SQL_aid = "SELECT MAX(AID) AS MAID FROM SYSTEM.ACCOUNT;";
@@ -57,13 +57,13 @@ public class open extends AbstractProcessor {
 		}
 		String rs;
 		if( createResult == 0 )
-			rs = "failed";
+			rs = "Open Account Fail";
 		else
 		{
-			rs = "success";
+			rs = "Open Account Success\nNew Account Id is " + newAid;
 			Log.log(rd.getJobNumber(),newAid,data[0],newAid, Double.parseDouble(data[4]), 0, Double.parseDouble(data[4]));
 		}
 		SendDataList.getInstance().add(
-				new SendData( rd, head + rs + ":new account id is " + newAid ));		
+				new SendData( rd, head + rs));		
 	}
 }

@@ -51,11 +51,11 @@ public class withdrawal extends AbstractProcessor{
 		String rs;
 		if( isSuccess )
 		{
-			rs = "balance:" + (balance1-sum);
-			Log.log( rd.getJobNumber(), data[1], data[0], rs, 0, 0, 0 );
+			rs = "Withdrawal Success\nCurrent Balance:" + (balance1-sum);
+			Log.log( rd.getJobNumber(), data[1], data[0], "", 0, 0, 0 );
 		}
 		else
-			rs = "failed";
+			rs = "Withdrawal Failed";
 		SendDataList.getInstance().add(
 				new SendData( rd, head + rs ));
 	}

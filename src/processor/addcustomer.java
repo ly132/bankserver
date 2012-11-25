@@ -29,11 +29,11 @@ public class addcustomer extends AbstractProcessor{
 		}
 		if( isSuccess )
 		{
-			rs = "success";
+			rs = "Add Customer " + data[1] + " Success";
 			Log.log(rd.getJobNumber(),"",data[0],data[1], 0, 0, 0);
 		}
 		else
-			rs = "failed";
+			rs = "Add Customer " + data[1] + " Fail";
 		SendDataList.getInstance().add(
 				new SendData( rd, head + rs ));
 	}

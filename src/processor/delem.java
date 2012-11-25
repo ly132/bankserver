@@ -27,7 +27,7 @@ public class delem extends AbstractProcessor {
 					isSuccess = true;
 			}
 			else
-				throw new Exception("pid not exist");
+				throw new Exception("Delete Employee Fail\nTarget Not Exist");
 		}catch( Exception e )
 		{
 			e.printStackTrace();
@@ -36,12 +36,12 @@ public class delem extends AbstractProcessor {
 		}
 		if( isSuccess )
 		{
-			rs = "success";
+			rs = "Delete Employee " + data[1] + " Success";
 			Log.log(rd.getJobNumber(),"",data[0],data[1], 0, 0, 0);
 		}
 		else
 			if(rs.equals(""))
-				rs = "failed";
+				rs = "Delete Employee Fail";
 		SendDataList.getInstance().add(
 				new SendData( rd, head + rs ));
 		

@@ -5,6 +5,8 @@ import processor.AbstractProcessor;
 import data.OnlineUserList;
 import data.RcvData;
 import data.RcvDataList;
+import data.SendData;
+import data.SendDataList;
 
 /**
  * A class that processes the message received.
@@ -20,25 +22,19 @@ public class MsgProcessor implements Runnable {
 	{		
 		while(true)
 		{
+			RcvData rd=null;
 			try {
-				RcvData rd = RcvDataList.getInstance().pop();
+				rd = RcvDataList.getInstance().pop();
 //				tryActive(rd.getID());
 			
 				AbstractProcessor ap = (AbstractProcessor) Class.forName(
 						"processor." + rd.getType()).newInstance();				
 				ap.processing(rd);
-			} catch (InstantiationException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IllegalAccessException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (ClassNotFoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				break;
+			} catch ( Exception e )
+			{
+				e.printStackTrace();
+				SendDataList.getInstance().add(
+						new SendData(rd,rd.getData()[0]+ Server.token + "Operation Fail"));
 			}
 		}
 	}

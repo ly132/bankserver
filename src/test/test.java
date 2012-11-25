@@ -1,20 +1,25 @@
 package test;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 public class test {
 
 	public static void main(String[] args){
 		
-		String[] s = "TIME\t\t\tOPER\tTYPE\t\tOUTCOME\tBALANCE".split("\\t");
-		System.out.println(s.length);
-		int c = 0;
-		for( String ss : s )
-		{
-			System.out.println(c+":"+ss);
-			c++;
-		}
+		Connection con = null;
+		String dbURL = "jdbc:mysql://172.18.216.170:3306/System";
+		String user = "root";
+		String passwd = "root";
 		
-		System.out.println("2012-11-13".replaceAll("-", ""));
 		
-		System.out.println(Double.parseDouble(""));
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+				con = DriverManager.getConnection(dbURL,user,passwd);
+			} catch( Exception e)
+			{
+				e.printStackTrace();
+			}
 	}
 }
