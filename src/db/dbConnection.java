@@ -4,7 +4,7 @@ import	java.sql.*;
 public class dbConnection {
 	
 	Connection con = null;
-	String dbURL = "jdbc:mysql://172.18.58.83:3306/System";
+	String dbURL = "jdbc:mysql://127.0.0.1:3306/System";
 	String user = "root";
 	String passwd = "root";
 	

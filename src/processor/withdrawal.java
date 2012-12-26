@@ -12,7 +12,7 @@ import db.UpdateProcessor;
 public class withdrawal extends AbstractProcessor{
 
 	public void processing(RcvData rd) {
-		//	rcvd	3^a_id^passwd^balance
+		//	rcvd	withdrawal^a_id^passwd^balance
 		//	send	3^balance or 3^failed
 		String data[] = rd.getData();
 		String head = data[0] + Server.token;
@@ -52,7 +52,7 @@ public class withdrawal extends AbstractProcessor{
 		if( isSuccess )
 		{
 			rs = "Withdrawal Success\nCurrent Balance:" + (balance1-sum);
-			Log.log( rd.getJobNumber(), data[1], data[0], "", 0, 0, 0 );
+			Log.log( rd.getJobNumber(), data[1], data[0], "", 0, sum, (balance1-sum) );
 		}
 		else
 			rs = "Withdrawal Failed";
